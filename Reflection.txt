@@ -1,0 +1,36 @@
+/* Reflection.txt for COMP112 - 2018T1, Assignment 5
+ * Name: Matthew Corfiatis
+ * Username: CorfiaMatt
+ * ID: 300447277
+ */
+
+Questions for Reflection: 
+=========================
+
+1. For the first part of the Core of ImageRenderer, you didn't need to use
+while(scan.hasNext()), but for the second part (animated images) you did need to
+use while(scan.hasNext()). Explain the difference.
+
+2. If an image was standard SVGA size (800x600), how big might a ppm file of the
+image be, given that each character in the file (including the spaces) requires
+1 byte?  How much worse is this than a typical jpg or png file of the same
+number of pixels?  (you may need to go and find some typical images that are
+about 800x600 pixels).
+
+3. The pbm format used comments that started with # and went to the end of the
+line (just like Java comments starting with //).  
+HTML comments start with <!--  and go to -->  (just like Java comments starting
+with /* and ending with */) which means that you can put html comments
+in between data values, instead of only at the end of the line. Discuss the
+advantages and disadvantages of these two schemes for comments. Which would be
+easier to process?
+
+
+Answers for Reflection:
+=======================
+
+In the first part of the Core, while(scan.hasNext()) was not needed because the length of the data was given in the form of width and height. The data length was equal to width * height. In the animated images, the length of each animation frame was known, but the number of frames was unknown. while(scan.hasNext()) was required to check if there are any more frames at the end of the current image, and if so, render the next one.
+
+If a colour PPM was 600x800, there would need to be 480000 pixel values. Each pixel value has 3 numbers, each with 1-3 characters, we can average that to 2 characters, + one space for each character. So 6 characters for every pixel, thats 2880000. Each character represents 1 byte in ASCII so that is roughly 2MiB for the raw image data, not including newline characters that occur every 80 characters or so and the file header that adds a few extra bytes. A JPG of 800x600 is roughly 7KiB. The size of most modern image formats will change depending on the colours in the image. This is because of compression. The more entropy the image has, the less effective the compression is. A major factor in the size of the PPM file is that the data is stored as text. If you were encodig the value 255 into a PPM format pixel, it would require 4 bytes, 3 for the characters and 1 for a space delimiter, this value could easily be stored in 1 byte. This 4x increase in size is not the only factor, PPM's dont have any compression or redundancy compensation of any sort. This format is not designed for small disk space, it makes it easier to understand the image because it is simple and you can add comments inside it.
+
+// comments are quicker to write in my oppinion, but the /**/ comments are more flexible. The /**/ comments are good if you want to comment out a whole block of code for debugging purposes. I think the // comments are easier to process because if the program detects a // in the text, it can just skip to the next line. The /**/ comments are not much harder to process, the program just has to switch into comment mode when it detects /* and back out when it detects */.
